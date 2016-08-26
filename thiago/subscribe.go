@@ -5,16 +5,13 @@ type Subscriber struct {
 	Tags []string `bson:"tags"`
 }
 
-func Subscribe(name string, tags []string) error{
-	session, err := GetSession()
-	if err != nil {
-		return err
-	}
+func (s *Session) Subscribe(name string, tags []string) error{
+	session := s.Session
 	subscriber := Subscriber{
 		Name: name,
 		Tags: tags,
 	}
-	coll := session.DB(Database).C(Subscribers)
+	coll := session.DB(s.Database).C(s.Subscribers)
 	if err := coll.Insert(subscriber); err != nil {
 		return err
 	}

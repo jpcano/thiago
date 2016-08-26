@@ -5,37 +5,65 @@ import (
 	"time"
 )
 
-var session *mgo.Session
+type Session struct {
+	Session *mgo.Session
+	Database string
+	Subscribers string
+	Publications string
+}
 
-const (
-	Host       = "127.0.0.1:27017"
-	Username   = ""
-	Password   = ""
-	Database   = "thiago"
-	Publications = "publications"
-	Subscribers = "subscribers"
-)
+type SessionInfo struct {
+	Host string
+	Username string
+	Password string
+	Database string
+	Publications string
+	Subscribers string
+}
 
-func GetSession() (*mgo.Session, error) {
-	if session == nil {
-		var err error
+func GetSession(info SessionInfo) (*Session, error) {
+	mgosession, err := mgo.DialWithInfo(&mgo.DialInfo{
+		Addrs:    []string{info.Host},
+		Username: info.Username,
+		Password: info.Password,
+		Database: info.Database,
+		Timeout:  60 * time.Second,
+	})
 
-		session, err = mgo.DialWithInfo(&mgo.DialInfo{
-			Addrs:    []string{Host},
-			Username: Username,
-			Password: Password,
-			Database: Database,
-			Timeout:  60 * time.Second,
-		})
-
-		if err != nil {
-			return nil, err
-		}
+	if err != nil {
+		return nil, err
 	}
 
+	session := &Session{
+		Session: mgosession,
+		Database: info.Database,
+		Subscribers: info.Subscribers,
+		Publications: info.Publications,
+	}
+	
 	return session, nil
 }
 
-func Close() {
-	session.Close()
+// func GetSession() (*mgo.Session, error) {
+// 	if session == nil {
+// 		var err error
+
+// 		session, err = mgo.DialWithInfo(&mgo.DialInfo{
+// 			Addrs:    []string{Host},
+// 			Username: Username,
+// 			Password: Password,
+// 			Database: Database,
+// 			Timeout:  60 * time.Second,
+// 		})
+
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 	}
+
+// 	return session, nil
+// }
+
+func (p *Session) Close() {
+	p.Session.Close()
 }

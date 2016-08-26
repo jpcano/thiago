@@ -5,12 +5,9 @@ import (
 	// "fmt"
 )
 
-func FindSubscriberByTags(tags []string) ([]string, error){
-	session, err := GetSession()
-	if err != nil {
-		return nil, err
-	}
-	coll := session.DB(Database).C(Subscribers)
+func (s *Session) FindSubscriberByTags(tags []string) ([]string, error){
+	session := s.Session
+	coll := session.DB(s.Database).C(s.Subscribers)
 	var subscribers []Subscriber
 	if err := coll.Find(bson.M{ "tags": bson.M{"$in": tags}}).Select(bson.M{"_id":0}).All(&subscribers); err != nil {
 		return nil, err
