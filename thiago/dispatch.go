@@ -9,7 +9,7 @@ func (s *Session) FindSubscriberByTags(tags []string) ([]string, error){
 	session := s.Session
 	coll := session.DB(s.Database).C(s.Subscribers)
 	var subscribers []Subscriber
-	if err := coll.Find(bson.M{ "tags": bson.M{"$in": tags}}).Select(bson.M{"_id":0}).All(&subscribers); err != nil {
+	if err := coll.Find(bson.M{"tags":bson.M{"$in":tags}}).Select(bson.M{"_id":0}).All(&subscribers); err != nil {
 		return nil, err
 	}
 	var results []string

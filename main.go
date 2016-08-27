@@ -4,6 +4,7 @@ import (
 	"log"
 	"fmt"
 	"github.com/jpcano/thiago/thiago"
+	// "gopkg.in/mgo.v2/bson"
 )
 
 func main() {
@@ -17,42 +18,42 @@ func main() {
 	}
 
 	// Ask Alberto why if I put this inside the if does not work
-	caca, err := thiago.GetSession(info)
+	resource, err := thiago.GetSession(info)
 	if  err != nil {
 		log.Fatal(err)
 	}
 
-	defer caca.Close()
+	defer resource.Close()
 	
 	fmt.Println("Adding publication")
-	if err := caca.Publish("http://helpscout", []string{"Go", "Python"}); err != nil {
+	if err := resource.Publish("http://helpscout", []string{"html", "css"}); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Publication inserted successfully!")
 
 	
 	fmt.Println("Adding petros.koklas subscribed to Go and Java")
-	if err := caca.Subscribe("petros.koklas", []string{"Go", "Java"}); err != nil {
+	if err := resource.Subscribe("petros.koklas", []string{"Go", "Java"}); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Subscriber inserted successfully!")
 
 
 	fmt.Println("Adding jesus.cano subscribed to Go and Python")
-	if err := caca.Subscribe("jesus.cano", []string{"Go", "Python"}); err != nil {
+	if err := resource.Subscribe("jesus.cano", []string{"Go", "Python"}); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Subscriber inserted successfully!")
 
 	fmt.Println("Adding Pablo subscribed to Javascript")
-	if err := caca.Subscribe("pablo", []string{"Javascript"}); err != nil {
+	if err := resource.Subscribe("pablo", []string{"Javascript"}); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("Subscriber inserted successfully!")
 
 
 	fmt.Println("Finding subscribers subscribed to Java:")
-	if names, err := caca.FindSubscriberByTags([]string{"Java"}); err == nil {
+	if names, err := resource.FindSubscriberByTags([]string{"Java"}); err == nil {
 		for _, name := range names{
 			fmt.Println(name)
 		}
@@ -61,7 +62,7 @@ func main() {
 	}
 	
 	fmt.Println("Finding subscribers subscribed to Go:")
-	if names, err := caca.FindSubscriberByTags([]string{"Go"})
+	if names, err := resource.FindSubscriberByTags([]string{"Go"})
 	err == nil {
 		for _, name := range names{
 			fmt.Println(name)
@@ -71,7 +72,7 @@ func main() {
 	}
 
 	fmt.Println("Finding subscribers subscribed to Java or Python:")
-	if names, err := caca.FindSubscriberByTags([]string{"Java", "Python"})
+	if names, err := resource.FindSubscriberByTags([]string{"Java", "Python"})
 	err == nil {
 		for _, name := range names{
 			fmt.Println(name)
@@ -82,7 +83,7 @@ func main() {
 	
 
 	fmt.Println("Finding subscribers subscribed to Javascript:")
-	if names, err := caca.FindSubscriberByTags([]string{"Javascript"})
+	if names, err := resource.FindSubscriberByTags([]string{"Javascript"})
 	err == nil {
 		for _, name := range names{
 			fmt.Println(name)

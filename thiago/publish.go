@@ -1,5 +1,9 @@
 package thiago
 
+// import (
+// 	"gopkg.in/mgo.v2/bson"
+// )
+
 type Publication struct {
 	Data string `bson:"data"`
 	Tags []string `bson:"tags"`
