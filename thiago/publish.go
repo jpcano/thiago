@@ -6,22 +6,21 @@ package thiago
 
 type Publication struct {
 	Data string `bson:"data"`
-	Tags []string `bson:"tags"`
+	Tags interface{} `bson:"tags"`
 }
 
-func (s *Session) Publish(data string, tags []string) error{
-	session := s.Session
-	publication := Publication{
-		Data: data,
-		Tags: tags,
-	}
-	coll := session.DB(s.Database).C(s.Publications)
+func (p *Publication) New(data string, tags interface{}) {
+	p.Data = data
+	p.Tags = tags
+}
+
+func (s *Session) Publish(data string, tags interface{}) error{
+	var publication Publication
+	publication.New(data, tags)
+
+	coll := s.Session.DB(s.Database).C(s.Publications)
 	if err := coll.Insert(publication); err != nil {
 		return err
 	}
 	return nil
 }
-
-
-
-
