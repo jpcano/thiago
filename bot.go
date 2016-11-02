@@ -121,8 +121,8 @@ func (c *publishController) Handle(bot flamingo.Bot, msg flamingo.Message) error
 func main() {
 	// token := os.Getenv("SLACK_TOKEN")
 	// id := os.Getenv("BOT_ID")
-	token := "xoxb-71041051398-hMnp7KB41pDJ5DQdjwYWG1Nx"
-	id := "B2314H38U"
+	token := "TOKENXXX"
+	id := "IDXXX"
 	client := slack.NewClient(token, slack.ClientOptions{
 		Debug: true,
 	})
